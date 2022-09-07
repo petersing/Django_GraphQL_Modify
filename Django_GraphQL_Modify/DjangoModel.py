@@ -80,23 +80,23 @@ class DjangoObjectType(ObjectType):
                     if name in cls.__dict__:
                         continue
                     elif cls.model_name.get(field.related_model.__name__):
-                        out[name] = Field(cls.model_name[field.related_model.__name__]['GrapheQL'])
+                        out[field.name] = Field(cls.model_name[field.related_model.__name__]['GrapheQL'])
                     else:
                         #### For Default and initial the model for graphql
                         cls.WaitForFinish[field.related_model.__name__] = {model.__name__: name}
                         ModelFieldsData = ObjectTypeMeta(field.related_model.__name__, (ObjectType, ), cls.get_model_graphene(field.related_model))           
-                        out[name] = Field(ModelFieldsData)
+                        out[field.name] = Field(ModelFieldsData)
                 elif isinstance(FieldType, ManyToManyField):
                     #### This want to make sure user can overrate the type
                     if name in cls.__dict__:
                         continue
                     elif cls.model_name.get(field.related_model.__name__):
-                        out[name] = List(cls.model_name[field.related_model.__name__]['GrapheQL'])
+                        out[field.name] = List(cls.model_name[field.related_model.__name__]['GrapheQL'])
                     else:
                         cls.WaitForFinish[field.related_model.__name__] = {model.__name__: name}
                         Link_Field = cls.get_model_graphene(field.related_model)
                         ModelFieldsData = ObjectTypeMeta(field.related_model.__name__, (ObjectType, ), {**Link_Field})     
-                        out[name] = List(ModelFieldsData)
+                        out[field.name] = List(ModelFieldsData)
 
                     if cls.ModelName == model.__name__:
                         setattr(cls, 'resolve_{}'.format(name), lambda x, y : getattr(x, y.field_name).all())
@@ -121,42 +121,42 @@ class DjangoObjectType(ObjectType):
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = Int()
+                        out[field.name] = Int()
                 elif FieldType == "BigInt":
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = BigInt()
+                        out[field.name] = BigInt()
                 elif FieldType == 'Float':
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = Float()
+                        out[field.name] = Float()
                 elif FieldType == 'ID':
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = ID()
+                        out[field.name] = ID()
                 elif FieldType == "String":
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = String()
+                        out[field.name] = String()
                 elif FieldType == 'JSON':
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = JSONString()
+                        out[field.name] = JSONString()
                 elif FieldType == 'Boolean':
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = Boolean()
+                        out[field.name] = Boolean()
                 elif FieldType == 'Date':
                     if name in cls.__dict__:
                         continue
                     else:
-                        out[name] = DateTime()
+                        out[field.name] = DateTime()
                 else:
                     print(type(field))
                     print('name: {}, Field: {}'.format(name, field))
